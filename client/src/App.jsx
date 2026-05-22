@@ -11,7 +11,7 @@ import Flyers from "./pages/Flyers";
 import Apply from "./pages/Apply";
 import BookModel from "./pages/BookModel";
 import Contact from "./pages/Contact";
-
+import AdminSystemCheck from "./admin/AdminSystemCheck";
 import AdminLogin from "./admin/AdminLogin";
 import AdminDashboard from "./admin/AdminDashboard";
 import AdminApplications from "./admin/AdminApplications";
@@ -116,6 +116,14 @@ function AppLayout() {
             </ProtectedAdminRoute>
           }
         />
+<Route
+  path="/admin/system-check"
+  element={
+    <ProtectedAdminRoute>
+      <AdminSystemCheck />
+    </ProtectedAdminRoute>
+  }
+/>
       </Routes>
 
       {!isAdminPage && <Footer />}

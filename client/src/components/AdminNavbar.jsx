@@ -114,6 +114,9 @@ export default function AdminNavbar() {
           <NavLink to="/admin/change-password" className={navLinkClass}>
             Password
           </NavLink>
+          <NavLink to="/admin/system-check" className={navLinkClass}>
+            System
+          </NavLink>
           <Link
             to="/"
             className="rounded-full border border-slate-300 px-4 py-2 text-sm font-black text-slate-900 hover:border-black hover:bg-black hover:text-white"
