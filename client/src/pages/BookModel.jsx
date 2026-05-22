@@ -15,23 +15,19 @@ export default function BookModel() {
     message: "",
   });
 
+  const [settings, setSettings] = useState(null);
+  const [settingsLoading, setSettingsLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [settings, setSettings] = useState(null);
-  const handleChange = (e) => {
-    const { name, value } = e.target;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
   useEffect(() => {
     let ignore = false;
 
     const fetchSettings = async () => {
       try {
+        setSettingsLoading(true);
+
         const { data } = await API.get("/api/settings");
 
         if (!ignore) {
@@ -43,6 +39,10 @@ export default function BookModel() {
         if (!ignore) {
           setSettings(null);
         }
+      } finally {
+        if (!ignore) {
+          setSettingsLoading(false);
+        }
       }
     };
 
@@ -52,6 +52,35 @@ export default function BookModel() {
       ignore = true;
     };
   }, []);
+
+  const businessName = settings?.businessName || "The QueensMen";
+  const phone = settings?.phone || "(704) 555-1234";
+  const email = settings?.email || "info@thequeensmen.com";
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const resetForm = () => {
+    setFormData({
+      fullName: "",
+      company: "",
+      email: "",
+      phone: "",
+      eventType: "",
+      eventDate: "",
+      location: "",
+      numberOfModels: "",
+      budget: "",
+      message: "",
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -64,18 +93,11 @@ export default function BookModel() {
 
       setSuccess("Booking request submitted successfully!");
 
-      setFormData({
-        fullName: "",
-        company: "",
-        email: "",
-        phone: "",
-        eventType: "",
-        eventDate: "",
-        location: "",
-        numberOfModels: "",
-        budget: "",
-        message: "",
-      });
+      resetForm();
+
+      setTimeout(() => {
+        setSuccess("");
+      }, 5000);
     } catch (error) {
       console.error("Booking submit error:", error);
 
@@ -83,30 +105,60 @@ export default function BookModel() {
         error.response?.data?.message ||
           "Something went wrong while submitting your booking request.",
       );
+
+      setTimeout(() => {
+        setError("");
+      }, 5000);
     } finally {
       setLoading(false);
     }
   };
-  const businessName = settings?.businessName || "The QueensMen";
-  const phone = settings?.phone || "(704) 555-1234";
-  const email = settings?.email || "info@thequeensmen.com";
+
+  if (settingsLoading) {
+    return (
+      <main className="min-h-screen bg-white">
+        <section className="flex min-h-screen items-center justify-center px-6">
+          <div className="text-center">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-red-700 bg-white shadow-xl">
+              <span className="text-3xl font-black text-red-700">Q</span>
+            </div>
+
+            <p className="font-bold uppercase tracking-[0.25em] text-red-700">
+              Loading Booking Form
+            </p>
+
+            <p className="mt-3 text-slate-500">
+              Preparing the booking details...
+            </p>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
   return (
-    <main className="bg-black text-white">
+    <main className="bg-white text-black">
       {/* HEADER */}
-      <section className="border-b border-red-900/40 bg-black">
+      <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-6 py-20">
-          <p className="font-bold uppercase tracking-[0.25em] text-red-600">
-            Book The QueensMen
+          <p className="font-bold uppercase tracking-[0.25em] text-red-700">
+            Booking Request
           </p>
 
-          <h1 className="mt-4 text-5xl font-black md:text-6xl">
-            Request Professional{" "}
-            <span className="text-red-700">Male Models</span>
+          <h1 className="mt-4 text-5xl font-black text-slate-950 md:text-7xl">
+            Book{" "}
+            {businessName === "The QueensMen" ? (
+              <>
+                The <span className="text-red-700">Q</span>ueensMen
+              </>
+            ) : (
+              businessName
+            )}
           </h1>
 
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">
-            Submit a booking request for fashion shows, brand campaigns,
-            photoshoots, luxury events, promotional appearances, and private
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
+            Request professional male models for fashion shows, photoshoots,
+            brand campaigns, luxury events, promotional appearances, and private
             showcases.
           </p>
         </div>
@@ -116,59 +168,22 @@ export default function BookModel() {
       <section className="mx-auto grid max-w-7xl gap-10 px-6 py-16 lg:grid-cols-[1fr_1.4fr]">
         {/* SIDE INFO */}
         <aside className="grid gap-6">
-          <div className="rounded-3xl border border-red-900/40 bg-white/5 p-8 shadow-2xl">
-            <h2 className="text-3xl font-black text-white">Booking Services</h2>
-
-            <div className="mt-6 space-y-5 text-slate-300">
-              <div className="rounded-2xl border border-white/10 bg-black p-5">
-                <h3 className="font-black text-red-600">Fashion Shows</h3>
-                <p className="mt-2 text-sm leading-6">
-                  Book models for runway events, showcases, and designer
-                  presentations.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black p-5">
-                <h3 className="font-black text-red-600">Photoshoots</h3>
-                <p className="mt-2 text-sm leading-6">
-                  Hire talent for editorial shoots, brand visuals, campaigns,
-                  and creative projects.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black p-5">
-                <h3 className="font-black text-red-600">Brand Events</h3>
-                <p className="mt-2 text-sm leading-6">
-                  Bring bold, classy presence to launches, mixers, promotions,
-                  and luxury experiences.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-8 rounded-2xl border-l-4 border-red-700 bg-black p-5">
-              <p className="text-sm leading-6 text-slate-300">
-                After the client submits this request, the owner can review the
-                details and follow up by email or phone.
-              </p>
-            </div>
-          </div>
-
-          <div className="rounded-3xl border border-red-900/40 bg-white p-6 text-black shadow-2xl">
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-xl">
             <p className="font-bold uppercase tracking-[0.25em] text-red-700">
               Booking Info
             </p>
 
             <h2 className="mt-3 text-3xl font-black text-slate-950">
-              Book {businessName}
+              Request Talent
             </h2>
 
             <p className="mt-4 leading-7 text-slate-600">
-              Submit your booking request and the team will review the event
-              details, requested date, location, and talent needs.
+              Submit your booking request and the team will review your event
+              details, requested date, location, and model needs.
             </p>
 
             <div className="mt-6 grid gap-4">
-              <div className="rounded-2xl bg-slate-100 p-5">
+              <div className="rounded-2xl bg-white p-5 ring-1 ring-slate-200">
                 <p className="text-xs font-black uppercase tracking-widest text-red-700">
                   Phone
                 </p>
@@ -181,31 +196,77 @@ export default function BookModel() {
                 </a>
               </div>
 
-              <div className="rounded-2xl bg-slate-100 p-5">
+              <div className="rounded-2xl bg-white p-5 ring-1 ring-slate-200">
                 <p className="text-xs font-black uppercase tracking-widest text-red-700">
                   Email
                 </p>
 
                 <a
                   href={`mailto:${email}`}
-                  className="mt-2 block text-lg font-black text-slate-950 hover:text-red-700"
+                  className="mt-2 block break-words text-lg font-black text-slate-950 hover:text-red-700"
                 >
                   {email}
                 </a>
               </div>
             </div>
           </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl">
+            <h3 className="text-2xl font-black text-slate-950">
+              Booking Services
+            </h3>
+
+            <div className="mt-5 grid gap-4">
+              <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+                <h4 className="font-black text-red-700">Fashion Shows</h4>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Book models for runway events, showcases, and designer
+                  presentations.
+                </p>
+              </div>
+
+              <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+                <h4 className="font-black text-red-700">Photoshoots</h4>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Hire talent for editorial shoots, brand visuals, campaigns,
+                  and creative projects.
+                </p>
+              </div>
+
+              <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+                <h4 className="font-black text-red-700">Brand Events</h4>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Bring bold, classy presence to launches, mixers, promotions,
+                  and luxury experiences.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-3xl border-l-4 border-red-700 bg-slate-50 p-6 shadow-sm ring-1 ring-slate-200">
+            <p className="text-sm font-semibold leading-6 text-slate-600">
+              After submitting, the owner can review your request in the admin
+              dashboard and follow up by email or phone.
+            </p>
+          </div>
         </aside>
 
-        {/* BOOKING FORM */}
+        {/* FORM */}
         <form
           onSubmit={handleSubmit}
-          className="rounded-3xl bg-white p-8 text-black shadow-2xl"
+          className="rounded-3xl border border-slate-200 bg-white p-8 text-black shadow-2xl"
         >
-          <div className="grid gap-5 md:grid-cols-2">
+          <h2 className="text-3xl font-black text-slate-950">Booking Form</h2>
+
+          <p className="mt-2 text-slate-600">
+            Fill out the event details below so the team can review your
+            request.
+          </p>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
             <div>
               <label className="mb-2 block text-sm font-bold text-slate-700">
-                Full Name
+                Full Name *
               </label>
               <input
                 type="text"
@@ -234,7 +295,7 @@ export default function BookModel() {
 
             <div>
               <label className="mb-2 block text-sm font-bold text-slate-700">
-                Email
+                Email *
               </label>
               <input
                 type="email"
@@ -249,7 +310,7 @@ export default function BookModel() {
 
             <div>
               <label className="mb-2 block text-sm font-bold text-slate-700">
-                Phone
+                Phone *
               </label>
               <input
                 type="tel"
@@ -264,7 +325,7 @@ export default function BookModel() {
 
             <div>
               <label className="mb-2 block text-sm font-bold text-slate-700">
-                Event Type
+                Event Type *
               </label>
               <select
                 name="eventType"
@@ -285,7 +346,7 @@ export default function BookModel() {
 
             <div>
               <label className="mb-2 block text-sm font-bold text-slate-700">
-                Event Date
+                Event Date *
               </label>
               <input
                 type="date"
@@ -299,7 +360,7 @@ export default function BookModel() {
 
             <div>
               <label className="mb-2 block text-sm font-bold text-slate-700">
-                Event Location
+                Event Location *
               </label>
               <input
                 type="text"
@@ -314,7 +375,7 @@ export default function BookModel() {
 
             <div>
               <label className="mb-2 block text-sm font-bold text-slate-700">
-                Number of Models Needed
+                Number of Models Needed *
               </label>
               <input
                 type="number"
