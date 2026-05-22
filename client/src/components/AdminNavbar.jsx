@@ -11,16 +11,29 @@ export default function AdminNavbar() {
 
   const navLinkClass = ({ isActive }) =>
     isActive
-      ? "rounded-full bg-red-700 px-4 py-2 text-sm font-bold text-white"
-      : "rounded-full px-4 py-2 text-sm font-bold text-slate-300 hover:bg-white/10 hover:text-white";
+      ? "rounded-full bg-red-700 px-4 py-2 text-sm font-black text-white shadow"
+      : "rounded-full px-4 py-2 text-sm font-black text-slate-700 hover:bg-slate-100 hover:text-red-700";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-red-900/40 bg-black/95 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
-        <Link to="/admin" className="text-2xl font-black text-white">
-          The <span className="text-red-700">Queens</span>Men Admin
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 text-black shadow-sm backdrop-blur">
+      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4 xl:flex-row xl:items-center xl:justify-between">
+        {/* BRAND */}
+        <Link to="/admin" className="flex items-center gap-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-red-700 bg-white shadow-sm">
+            <span className="text-xl font-black text-red-700">Q</span>
+          </div>
+
+          <div>
+            <p className="text-xl font-black leading-tight">
+              The <span className="text-red-700">Q</span>ueensMen
+            </p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
+              Admin Panel
+            </p>
+          </div>
         </Link>
 
+        {/* NAV LINKS */}
         <nav className="flex flex-wrap items-center gap-2">
           <NavLink to="/admin" end className={navLinkClass}>
             Dashboard
@@ -52,7 +65,7 @@ export default function AdminNavbar() {
 
           <Link
             to="/"
-            className="rounded-full border border-white/20 px-4 py-2 text-sm font-bold text-white hover:bg-white hover:text-black"
+            className="rounded-full border border-slate-300 px-4 py-2 text-sm font-black text-slate-900 hover:border-black hover:bg-black hover:text-white"
           >
             View Site
           </Link>
@@ -60,7 +73,7 @@ export default function AdminNavbar() {
           <button
             type="button"
             onClick={handleLogout}
-            className="rounded-full border border-red-700 px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-700 hover:text-white"
+            className="rounded-full border border-red-700 px-4 py-2 text-sm font-black text-red-700 hover:bg-red-700 hover:text-white"
           >
             Logout
           </button>
