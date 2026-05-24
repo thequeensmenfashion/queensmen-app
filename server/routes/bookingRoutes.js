@@ -5,7 +5,7 @@ import sendEmail from "../utils/sendEmail.js";
 
 const router = express.Router();
 
-// @route   POST /api/bookings
+// @route   POST /api/booking
 // @desc    Submit booking request
 // @access  Public
 router.post("/", async (req, res) => {
@@ -280,6 +280,70 @@ router.put("/:id/status", adminProtect, async (req, res) => {
     }
 
     await booking.save();
+    await sendEmail({
+      to: booking.email,
+      subject: `Booking Status Updated - ${booking.status}`,
+
+      html: `
+    <div style="font-family: Arial, sans-serif; padding: 30px; background: #f8fafc;">
+      
+      <div style="max-width: 600px; margin: auto; background: white; border-radius: 20px; padding: 40px;">
+        
+        <h1 style="color: #b91c1c; margin-bottom: 10px;">
+          The QueensMen
+        </h1>
+
+        <h2 style="margin-top: 0; color: #111827;">
+          Booking Status Updated
+        </h2>
+
+        <p style="font-size: 16px; color: #374151;">
+          Hello ${booking.fullName},
+        </p>
+
+        <p style="font-size: 16px; color: #374151; line-height: 1.7;">
+          Your booking request has been updated by our team.
+        </p>
+
+        <div
+          style="
+            margin-top: 30px;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 16px;
+            background: #f3f4f6;
+          "
+        >
+          <p style="margin: 0; font-size: 15px;">
+            <strong>Status:</strong>
+            ${booking.status}
+          </p>
+
+          ${
+            booking.adminNotes
+              ? `
+            <div style="margin-top: 15px;">
+              <strong>Admin Notes:</strong>
+              <p style="margin-top: 8px; line-height: 1.6;">
+                ${booking.adminNotes}
+              </p>
+            </div>
+          `
+              : ""
+          }
+        </div>
+
+        <p style="font-size: 16px; color: #374151;">
+          Thank you for choosing The QueensMen.
+        </p>
+
+        <p style="margin-top: 30px; color: #6b7280;">
+          — The QueensMen Team
+        </p>
+      </div>
+    </div>
+  `,
+    });
 
     res.json({
       success: true,
