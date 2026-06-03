@@ -25,7 +25,7 @@ import AdminForgotPassword from "./admin/AdminForgotPassword";
 import AdminResetPassword from "./admin/AdminResetPassword";
 import AdminUsers from "./admin/AdminUsers";
 import AdminCalendar from "./admin/AdminCalendar";
-
+import ClientPortal from "./pages/ClientPortal";
 import AdminAnalytics from "./admin/AdminAnalytics";
 function AppLayout() {
   const location = useLocation();
@@ -46,6 +46,7 @@ function AppLayout() {
         <Route path="/apply" element={<Apply />} />
         <Route path="/book" element={<BookModel />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/client-portal" element={<ClientPortal />} />
         <Route
           path="/admin/forgot-password"
           element={<AdminForgotPassword />}

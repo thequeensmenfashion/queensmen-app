@@ -12,7 +12,7 @@ import flyerRoutes from "./routes/flyerRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
-
+import clientRoutes from "./routes/clientRoutes.js";
 import sendEmail from "./utils/sendEmail.js";
 
 dotenv.config();
@@ -105,7 +105,7 @@ app.use("/api/flyers", flyerRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/models", modelRoutes);
 app.use("/api/dashboard", dashboardRoutes);
-
+app.use("/api/client", clientRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
