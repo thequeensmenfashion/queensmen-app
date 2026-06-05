@@ -24,7 +24,7 @@ const sendEmail = async ({ to, subject, html }) => {
     const response = await resend.emails.send({
       from:
         process.env.FROM_EMAIL ||
-        "The QueensMen <bookings@thequeensmenfashion.com>",
+        "The QueensMen <bookings@thequeensmenfasion.com>",
       to,
       subject,
       html,
