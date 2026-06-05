@@ -18,7 +18,7 @@ const sendEmail = async ({ to, subject, html }) => {
     }
 
     const fromEmail =
-      process.env.FROM_EMAIL || "bookings@thequeensmenfashion.com";
+      process.env.FROM_EMAIL || "bookings@thequeensmenfasion.com";
 
     console.log("Sending email with Resend...");
     console.log("TO:", to);
