@@ -17,14 +17,15 @@ const sendEmail = async ({ to, subject, html }) => {
       return null;
     }
 
+    const fromEmail =
+      process.env.FROM_EMAIL || "bookings@thequeensmenfashion.com";
+
     console.log("Sending email with Resend...");
     console.log("TO:", to);
-    console.log("FROM:", process.env.FROM_EMAIL);
+    console.log("FROM:", fromEmail);
 
     const response = await resend.emails.send({
-      from:
-        process.env.FROM_EMAIL ||
-        "The QueensMen <bookings@thequeensmenfasion.com>",
+      from: `The QueensMen <${fromEmail}>`,
       to,
       subject,
       html,
