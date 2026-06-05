@@ -23,6 +23,8 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://queensmen-app.vercel.app",
+"https://thequeensmenfashion.com",
+  "https://www.thequeensmenfashion.com",
   process.env.CLIENT_URL,
 ].filter(Boolean);
 
