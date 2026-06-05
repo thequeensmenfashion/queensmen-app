@@ -22,7 +22,9 @@ const sendEmail = async ({ to, subject, html }) => {
     console.log("FROM:", process.env.FROM_EMAIL);
 
     const response = await resend.emails.send({
-      from: process.env.FROM_EMAIL || "onboarding@resend.dev",
+      from:
+        process.env.FROM_EMAIL ||
+        "The QueensMen <bookings@thequeensmenfashion.com>",
       to,
       subject,
       html,
