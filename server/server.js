@@ -23,7 +23,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://queensmen-app.vercel.app",
-"https://thequeensmenfasion.com",
+  "https://thequeensmenfasion.com",
   "https://www.thequeensmenfasion.com",
   process.env.CLIENT_URL,
 ].filter(Boolean);
@@ -108,8 +108,9 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/models", modelRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/client", clientRoutes);
+
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });
