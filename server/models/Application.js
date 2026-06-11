@@ -40,8 +40,12 @@ const applicationSchema = new mongoose.Schema(
 
     experience: {
       type: String,
-      required: true,
-      enum: ["Beginner", "Some Experience", "Experienced", "Professional"],
+      experience: {
+        type: String,
+        default: "",
+      },
+     
+      
     },
 
     instagram: {
