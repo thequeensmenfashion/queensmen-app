@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
      profileImage,
      message,
    } = req.body;
-    if (!fullName || !email || !phone || !location || !age || !experience) {
+    if (!fullName || !email || !phone || !location) {
       return res.status(400).json({
         success: false,
         message: "Please fill in all required fields.",
