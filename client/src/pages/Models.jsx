@@ -132,13 +132,13 @@ export default function Models() {
                       <img
                         src={model.image}
                         alt={model.name}
-                        className="max-h-full max-w-full object-contain"
+                        className="h-96 w-full object-cover object-top"
                       />
                     ) : (
                       <p className="font-bold text-slate-500">No image added</p>
                     )}
 
-                    <div className="absolute left-4 top-4 rounded-full bg-red-700 px-4 py-2 text-xs font-black uppercase tracking-wide text-white shadow">
+                    <div className="absolute bottom-4 left-4 rounded-full bg-red-700 px-4 py-2 text-xs font-black uppercase tracking-wide text-white shadow">
                       {model.category}
                     </div>
 
