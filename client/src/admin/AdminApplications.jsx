@@ -84,6 +84,68 @@ const handleDelete = async (applicationId) => {
     setDeletingId(null);
   }
 };
+
+const downloadApplicationsCSV = () => {
+  const escapeCSV = (value) => {
+    const stringValue = String(value ?? "");
+    return `"${stringValue.replaceAll('"', '""')}"`;
+  };
+
+  const headers = [
+    "Full Name",
+    "Email",
+    "Phone",
+    "Location",
+    "Age",
+    "Height",
+    "Experience",
+    "Availability",
+    "Instagram",
+    "Portfolio",
+    "Profile Image",
+    "Status",
+    "Message",
+  ];
+
+  const rows = applications.map((application) => [
+    application.fullName,
+    application.email,
+    application.phone,
+    application.location,
+    application.age || "",
+    application.height || "",
+    application.experience || "",
+    application.availability || "",
+    application.instagram || "",
+    application.portfolio || "",
+    application.profileImage || "",
+    application.status || "Pending",
+    application.message || "",
+  ]);
+
+  const csvContent = [headers, ...rows]
+    .map((row) => row.map(escapeCSV).join(","))
+    .join("\n");
+
+  const blob = new Blob([csvContent], {
+    type: "text/csv;charset=utf-8;",
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = `queensmen-applications-${new Date()
+    .toISOString()
+    .slice(0, 10)}.csv`;
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+};
+
  return (
    <>
      <AdminNavbar />
@@ -107,7 +169,13 @@ const handleDelete = async (applicationId) => {
                  status.
                </p>
              </div>
-
+             <button
+               type="button"
+               onClick={downloadApplicationsCSV}
+               className="rounded-full bg-red-700 px-5 py-2 text-sm font-black text-white shadow-sm hover:bg-red-800"
+             >
+               Download CSV
+             </button>
              <div className="rounded-full border border-slate-200 bg-slate-50 px-5 py-2 text-sm font-black text-slate-800 shadow-sm">
                {applications.length} Total
              </div>
