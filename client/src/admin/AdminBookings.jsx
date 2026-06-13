@@ -151,6 +151,70 @@ export default function AdminBookings() {
       .filter((booking) => booking.eventDate)
       .sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
   };
+
+const downloadBookingsCSV = () => {
+  const escapeCSV = (value) => {
+    const stringValue = String(value ?? "");
+    return `"${stringValue.replaceAll('"', '""')}"`;
+  };
+
+  const headers = [
+    "Full Name",
+    "Email",
+    "Phone",
+    "Company",
+    "Event Type",
+    "Event Date",
+    "Event Time",
+    "Duration",
+    "Location",
+    "Models Needed",
+    "Budget",
+    "Status",
+    "Admin Notes",
+    "Message",
+  ];
+
+  const rows = bookings.map((booking) => [
+    booking.fullName,
+    booking.email,
+    booking.phone,
+    booking.company || "",
+    booking.eventType || "",
+    booking.eventDate ? new Date(booking.eventDate).toLocaleDateString() : "",
+    booking.eventTime || "",
+    booking.eventDuration || "",
+    booking.location || "",
+    booking.numberOfModels || "",
+    booking.budget || "",
+    booking.status || "Pending",
+    booking.adminNotes || "",
+    booking.message || "",
+  ]);
+
+  const csvContent = [headers, ...rows]
+    .map((row) => row.map(escapeCSV).join(","))
+    .join("\n");
+
+  const blob = new Blob([csvContent], {
+    type: "text/csv;charset=utf-8;",
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = `queensmen-bookings-${new Date()
+    .toISOString()
+    .slice(0, 10)}.csv`;
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+};
+
   return (
     <div className="w-full overflow-x-hidden">
       <AdminNavbar />
@@ -179,7 +243,13 @@ export default function AdminBookings() {
                 <div className="rounded-full border border-slate-200 bg-slate-50 px-5 py-2 text-sm font-black text-slate-800 shadow-sm">
                   {bookings.length} Total
                 </div>
-
+                <button
+                  type="button"
+                  onClick={downloadBookingsCSV}
+                  className="rounded-full bg-red-700 px-5 py-2 text-sm font-black text-white shadow-sm hover:bg-red-800"
+                >
+                  Download CSV
+                </button>
                 <div className="rounded-full border border-yellow-200 bg-yellow-50 px-5 py-2 text-sm font-black text-yellow-700 shadow-sm">
                   {pendingCount} Pending
                 </div>
